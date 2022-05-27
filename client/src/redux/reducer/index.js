@@ -1,3 +1,5 @@
+import { POST_IMAGE } from "../actions";
+
 const initialState = {
   countries: [],
 };
@@ -24,6 +26,8 @@ function sortDesc(arr, field) {
 
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
+    case POST_IMAGE:
+      return { ...state };
     default:
       return state;
   }
