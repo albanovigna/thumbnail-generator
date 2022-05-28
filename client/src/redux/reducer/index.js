@@ -1,7 +1,8 @@
-import { POST_IMAGE } from "../actions";
+import { POST_IMAGE, ADD_IMAGE } from "../actions";
 
 const initialState = {
-  countries: [],
+  image: [],
+  blob: [],
 };
 
 function sortAsc(arr, field) {
@@ -27,7 +28,9 @@ function sortDesc(arr, field) {
 const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case POST_IMAGE:
-      return { ...state };
+      return { ...state, blob: action.info };
+    case ADD_IMAGE:
+      return { ...state, image: state.image.concat(action.payload) };
     default:
       return state;
   }

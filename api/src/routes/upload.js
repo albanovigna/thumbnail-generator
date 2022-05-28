@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const path = require("path");
 const multer = require("multer");
-const fs = require("fs");
+const sharp = require("sharp");
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname, "../public/uploads"),
@@ -15,7 +15,7 @@ const uploadImage = multer({
   limits: { fileSize: 5000000 },
 }).single("image");
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   console.log("req body es", req.body);
   uploadImage(req, res, (err) => {
     if (err) {
@@ -23,7 +23,25 @@ router.post("/", (req, res) => {
       return res.status(400).json(err);
     }
     console.log(req.file);
-    res.send("uploaded");
+    sharp(req.file.path)
+      .resize(512, 512)
+      .jpeg()
+      .toBuffer()
+      .then((data) => {
+        const base64Data = data.toString("base64");
+
+        // const blobData = `data:${contentType};base64,${base64Data}`
+
+        res.status(202).json({
+          b64Data: base64Data,
+          contentType: "image/jpeg",
+          extension: "jpeg",
+        });
+        // res.send(base64Data)
+      })
+      .catch((err) => console.log(err));
+
+    // res.send("uploaded");
   });
 });
 
