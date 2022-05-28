@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addImage, postImage } from "../redux/actions";
-// import Image from "./Image";
 
 function Home() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [input, setInput] = useState({ selectedFile: null });
 
@@ -25,35 +25,21 @@ function Home() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [input]);
 
-  // const onSelectFile = (e) => {
-  //   if (!e.target.files || e.target.files.length === 0) {
-  //     setInput({ selectedFile: undefined });
-  //     return;
-  //   }
-
-  //   // I've kept this example simple by using the first image instead of multiple
-  //   setInput({ selectedFile: e.target.files[0] });
-  // };
-
   const handleChange = (e) => {
     e.preventDefault();
     setInput({ selectedFile: e.target.files[0] });
-    // dispatch(postImage(e.target.value))
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
-
-    console.log(input.selectedFile);
-    // Update the formData object
-    // formData.append("file", input.selectedFile);
     formData.append("image", input.selectedFile, input.selectedFile.name);
 
     dispatch(postImage(formData));
     dispatch(addImage(input.selectedFile.name));
     alert("Imagen enviada correctamente");
     setPreview(null);
+    navigate(`/image/${input.selectedFile.name}`);
   };
 
   return (
@@ -69,13 +55,7 @@ function Home() {
           Submit
         </button>
       </form>
-      <div>
-        {/* <input type="file" onChange={onSelectFile} /> */}
-        {input.selectedFile && <img src={preview} width="400px" />}
-      </div>
-      {input.selectedFile && (
-        <Link to={`/image/${input.selectedFile.name}`}>edit image</Link>
-      )}
+      <div>{input.selectedFile && <img src={preview} width="400px" />}</div>
     </div>
   );
 }
