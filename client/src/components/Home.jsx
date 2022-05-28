@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addImage, postImage } from "../redux/actions";
-import Image from "./Image";
+// import Image from "./Image";
 
 function Home() {
   const dispatch = useDispatch();
