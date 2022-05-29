@@ -15,9 +15,11 @@ export const postImage = (payload) => {
       },
     };
     const upload = await axios.post("/upload", payload, config);
-    const blob = b64toBlob(upload.data.b64Data, upload.data.contentType);
+    console.log(upload.data);
+    // const blob = b64toBlob(upload.data.b64Data, upload.data.contentType);
     // const [fileName] = payload.file.name.split(".");
-    dispatch({ type: POST_IMAGE, info: { blob, data: upload.data.extension } });
+    // dispatch({ type: POST_IMAGE, info: { blob, data: upload.data.extension } });
+    dispatch({ type: POST_IMAGE, info: upload.data });
   };
 };
 
