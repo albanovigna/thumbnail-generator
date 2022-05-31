@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { addImage, postImage } from "../redux/actions";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
@@ -138,7 +138,6 @@ function Home() {
               </div>
             )}
           </div>
-          {console.log(arrayFiles, "array files")}
           <Box
             style={{
               display: "flex",
@@ -166,6 +165,11 @@ function Home() {
                       width={`${x[0]}px`}
                       height={`${x[1]}px`}
                     ></img>
+                    {/* {blob.length > 0 && (
+                      <Link to={blob[i]} target="_blank" download>
+                        Download
+                      </Link>
+                    )} */}
                   </div>
                 );
               })}
