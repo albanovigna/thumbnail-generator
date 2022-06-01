@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link } from "react-router-dom";
-import { addImage, postImage } from "../redux/actions";
+import { useNavigate } from "react-router-dom";
+import { addImage, postImage, removeUrls } from "../redux/actions";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import Box from "@mui/material/Box";
@@ -17,7 +17,7 @@ function Home() {
   const navigate = useNavigate();
   const { isAuthenticated, isLoading } = useAuth0();
 
-  const blob = useSelector((state) => state.blob);
+  const urls = useSelector((state) => state.urls);
   const arrayFiles = [
     [400, 300],
     [160, 120],
@@ -46,12 +46,9 @@ function Home() {
   }, [input]);
   //
 
-  // useEffect(() => {
-  //   dispatch(addImage(input.selectedFile.name));
-  //   return () => {
-  //     dispatch(removeImage(input.selectedFile.name));
-  //   };
-  // }, []);
+  useEffect(() => {
+    dispatch(removeUrls());
+  }, []);
   const handleChange = (e) => {
     e.preventDefault();
     setInput({ selectedFile: e.target.files[0] });
@@ -64,9 +61,7 @@ function Home() {
 
     dispatch(postImage(formData));
     dispatch(addImage(input.selectedFile.name));
-    alert("Imagen enviada correctamente");
-    setPreview(null);
-    // navigate(`/image/${input.selectedFile.name}`);
+    alert("Imagen cargada correctamente");
   };
 
   if (isLoading) {
@@ -74,7 +69,6 @@ function Home() {
   }
   return (
     <div>
-      {/* {isAuthenticated ? <Logout /> : <Login />} */}
       {isAuthenticated ? (
         <div>
           <AppBar>
@@ -87,21 +81,6 @@ function Home() {
             onSubmit={(e) => handleSubmit(e)}
             encType="multipart/form-data"
           >
-            {/* <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={(e) => handleChange(e)}
-            /> */}
-            {/* <Input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={(e) => handleChange(e)}
-            />
-            <Button onClick={(e) => handleSubmit(e)} variant="contained">
-              Upload
-            </Button> */}
             <input
               type="file"
               multiple
@@ -129,7 +108,7 @@ function Home() {
             </Button>
           </form>
           <div>
-            {input.selectedFile && (
+            {input.selectedFile && urls.length === 0 && (
               <div>
                 <span>Original Image</span>
                 <ReactCrop crop={crop} onChange={setCrop}>
@@ -146,6 +125,7 @@ function Home() {
             }}
           >
             {input.selectedFile &&
+              urls.length === 0 &&
               arrayFiles.map((x, i) => {
                 return (
                   <div
@@ -165,73 +145,44 @@ function Home() {
                       width={`${x[0]}px`}
                       height={`${x[1]}px`}
                     ></img>
-                    {/* {blob.length > 0 && (
-                      <Link to={blob[i]} target="_blank" download>
-                        Download
-                      </Link>
-                    )} */}
                   </div>
                 );
               })}
           </Box>
+          {urls &&
+            urls.length > 0 &&
+            arrayFiles.map((x, i) => {
+              return (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: "10%",
+                    marginTop: "5%",
+                  }}
+                >
+                  <span
+                    style={{
+                      alignSelf: "center",
+                    }}
+                  >{`${x[0]} x ${x[1]} px`}</span>
+                  <img
+                    src={urls[i].Location}
+                    width={`${x[0]}px`}
+                    height={`${x[1]}px`}
+                  ></img>
+                  <a
+                    href={`http://localhost:3001/download/${urls[i].Key}`}
+                    target="_blank"
+                  >
+                    Download the File
+                  </a>
+                </div>
+              );
+            })}
         </div>
       ) : (
         <Login />
       )}
-      {/* <form onSubmit={(e) => handleSubmit(e)} encType="multipart/form-data">
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          onChange={(e) => handleChange(e)}
-        />
-        <Button onClick={(e) => handleSubmit(e)} variant="contained">
-          Upload
-        </Button>
-      </form>
-      <div>
-        {input.selectedFile && (
-          <div>
-            <span>Original Image</span>
-            <ReactCrop crop={crop} onChange={setCrop}>
-              <img src={preview} width="400px" />
-            </ReactCrop>
-          </div>
-        )}
-      </div>
-      {console.log(arrayFiles, "array files")}
-      <Box
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
-        {input.selectedFile &&
-          arrayFiles.map((x, i) => {
-            return (
-              <div
-                key={i}
-                style={{
-                  marginBottom: "10%",
-                  marginTop: "5%",
-                }}
-              >
-                <span
-                  style={{
-                    alignSelf: "center",
-                  }}
-                >{`${x[0]} x ${x[1]} px`}</span>
-                <img
-                  src={preview}
-                  width={`${x[0]}px`}
-                  height={`${x[1]}px`}
-                ></img>
-              </div>
-            );
-          })}
-      </Box>
-    </div> */}
     </div>
   );
 }
