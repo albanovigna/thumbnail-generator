@@ -26,42 +26,101 @@ const arrayFiles = [
   [120, 120],
 ];
 
+const resize = async (file, width, height) => {
+  sharp(file.path)
+    .resize(width, height)
+    .toBuffer()
+    .then((data) => {
+      const result = uploadFile(file, data, width);
+      return result;
+    });
+};
+
+const resizeImage = async (file, res) => {
+  const images = [];
+  const resize = ([size, other]) =>
+    sharp(file.path)
+      .resize(size, other)
+      .toBuffer()
+      .then(async (data) => {
+        const result = await uploadFile(file, data, size);
+        console.log("archivo subido!!");
+        images.push(result);
+      });
+  Promise.all(arrayFiles.map(resize)).then(async () => {
+    res.json(images);
+  });
+  return images;
+};
+
 router.post("/", uploadImage, async (req, res) => {
   const file = req.file;
   const images = [];
-  console.log(file);
-  // apply filter
-  // resize
 
-  // arrayFiles.map((size) => {
-  await sharp(file.path)
-    .resize(400, 300)
-    .toBuffer()
-    .then(async (data) => {
-      const result = await uploadFile(file, data, 400);
-      images.push(result);
-    });
-  await sharp(file.path)
-    .resize(160, 120)
-    .toBuffer()
-    .then(async (data) => {
-      const result = await uploadFile(file, data, 160);
-      images.push(result);
-    });
-  await sharp(file.path)
-    .resize(120, 120)
-    .toBuffer()
-    .then(async (data) => {
-      const result = await uploadFile(file, data, 120);
-      images.push(result);
-    });
-  // });
+  for (const size of arrayFiles) {
+    await sharp(file.path)
+      .resize(size[0], size[1])
+      .toBuffer()
+      .then(async (data) => {
+        const result = await uploadFile(file, data, size[0]);
+        images.push(result);
+      });
+  }
 
-  // const result = await uploadFile(file);
   await unlinkFile(file.path);
-  console.log(images);
   res.json(images);
 });
+
+module.exports = router;
+
+// await sharp(file.path)
+//   .resize(400, 300)
+//   .toBuffer()
+//   .then(async (data) => {
+//     const result = await uploadFile(file, data, 400);
+//     images.push(result);
+//   });
+// await sharp(file.path)
+//   .resize(160, 120)
+//   .toBuffer()
+//   .then(async (data) => {
+//     const result = await uploadFile(file, data, 160);
+//     images.push(result);
+//   });
+// await sharp(file.path)
+//   .resize(120, 120)
+//   .toBuffer()
+//   .then(async (data) => {
+//     const result = await uploadFile(file, data, 120);
+//     images.push(result);
+//   });
+
+// await Promise.all(
+//   arrayFiles.map(async (size) => {
+//     sharp(file.path)
+//       .resize(size[0], size[1])
+//       .toBuffer()
+//       .then((data) => {
+//         const result = uploadFile(file, data, size[0]);
+//         images.push(result);
+//       });
+//   })
+// );
+
+// const resize = ([size, other]) =>
+//   sharp(file.path)
+//     .resize(size, other)
+//     .toBuffer()
+//     .then(async (data) => {
+//       const result = await uploadFile(file, data, size);
+//       console.log("archivo subido!!");
+//       images.push(result);
+//     });
+// Promise.all(arrayFiles.map(resize)).then(async () => {
+//   await unlinkFile(file.path);
+//   res.json(images);
+// });
+// await resizeImage(file, res);
 
 // router.post("/", async (req, res) => {
 //   console.log("req body es", req.body);
@@ -105,5 +164,3 @@ router.post("/", uploadImage, async (req, res) => {
 //     // res.send("uploaded");
 //   });
 // });
-
-module.exports = router;
