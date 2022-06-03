@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addImage, postImage, removeUrls } from "../redux/actions";
@@ -23,6 +23,8 @@ function Home() {
     [160, 120],
     [120, 120],
   ];
+
+  const [enableCrop, setEnableCrop] = useState(false);
 
   const [input, setInput] = useState({ selectedFile: null });
 
@@ -51,17 +53,52 @@ function Home() {
   }, []);
   const handleChange = (e) => {
     e.preventDefault();
+    setImage(null);
+    console.log("target value es", e.target.files[0]);
     setInput({ selectedFile: e.target.files[0] });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
+    console.log();
     formData.append("image", input.selectedFile, input.selectedFile.name);
 
     dispatch(postImage(formData));
     dispatch(addImage(input.selectedFile.name));
     alert("Imagen cargada correctamente");
+  };
+
+  const getCroppedImg = () => {
+    let imagePreview = document.getElementById("preview");
+    const canvas = document.createElement("canvas");
+    const scaleX = imagePreview.naturalWidth / imagePreview.width;
+    const scaleY = imagePreview.naturalHeight / imagePreview.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext("2d");
+
+    // draw rotated image and store data.
+    ctx.drawImage(
+      imagePreview,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+
+    canvas.toBlob((blob) => {
+      setImage(URL.createObjectURL(blob));
+      const file = new File([blob], input.selectedFile.name, {
+        type: input.selectedFile.type,
+      });
+      setInput({ selectedFile: file });
+    });
+    console.log("INPUT EN CANVA ES: ", input.selectedFile);
   };
 
   if (isLoading) {
@@ -111,10 +148,34 @@ function Home() {
             {input.selectedFile && urls.length === 0 && (
               <div>
                 <span>Original Image</span>
+                <button onClick={() => setEnableCrop(!enableCrop)}>
+                  {enableCrop ? "Disable Crop" : "Enable Crop"}
+                </button>
+                {enableCrop ? (
+                  <div>
+                    <ReactCrop crop={crop} onChange={setCrop}>
+                      <img id="preview" src={preview} width="400px" />
+                    </ReactCrop>
+                    <button onClick={getCroppedImg}>Crop Image</button>
+                  </div>
+                ) : (
+                  <div>
+                    <img src={preview} width="400px" />
+                  </div>
+                )}
+                {/* //{" "}
                 <ReactCrop crop={crop} onChange={setCrop}>
-                  <img src={preview} width="400px" />
+                  // <img id="preview" src={preview} width="400px" />
+                  //{" "}
                 </ReactCrop>
+                // <button onClick={getCroppedImg}>Crop Image</button> */}
+                {image && (
+                  <div>
+                    <img src={image} alt="cropped image" />
+                  </div>
+                )}
               </div>
+              // <ImageCropper src={preview}></ImageCropper>
             )}
           </div>
           <Box
@@ -141,6 +202,7 @@ function Home() {
                       }}
                     >{`${x[0]} x ${x[1]} px`}</span>
                     <img
+                      style={{ filter: "blur(4px)" }}
                       src={preview}
                       width={`${x[0]}px`}
                       height={`${x[1]}px`}
