@@ -1,36 +1,66 @@
 import React, { createRef, useEffect, useState } from "react";
-import Cropper from "cropperjs";
-import "cropperjs/dist/cropper.min.css";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
-function ImageCropper({ src }) {
-  const [imageDestination, setImageDestination] = useState("");
+function ImageCropper({
+  src,
+  enableCrop,
+  setEnableCrop,
+  crop,
+  setCrop,
+  input,
+  setInput,
+  setImage,
+}) {
+  const getCroppedImg = () => {
+    let imagePreview = document.getElementById("preview");
+    const canvas = document.createElement("canvas");
+    const scaleX = imagePreview.naturalWidth / imagePreview.width;
+    const scaleY = imagePreview.naturalHeight / imagePreview.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext("2d");
 
-  const image = document.getElementById("image");
-  const cropper = new Cropper(image, {
-    aspectRatio: 16 / 9,
-    crop(event) {
-      console.log(event.detail.x);
-      console.log(event.detail.y);
-      console.log(event.detail.width);
-      console.log(event.detail.height);
-      console.log(event.detail.rotate);
-      console.log(event.detail.scaleX);
-      console.log(event.detail.scaleY);
-    },
-  });
+    // draw rotated image and store data.
+    ctx.drawImage(
+      imagePreview,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
 
+    canvas.toBlob((blob) => {
+      setImage(URL.createObjectURL(blob));
+      const file = new File([blob], input.selectedFile.name, {
+        type: input.selectedFile.type,
+      });
+      setInput({ selectedFile: file });
+    });
+    setEnableCrop(!enableCrop);
+  };
   return (
     <div>
-      <div>
-        <img
-          id="image"
-          src={src}
-          alt="Source"
-          style={{ display: "block", maxWidth: "100%" }}
-          width="400px"
-        />
-      </div>
-      <img src={imageDestination} alt="Destination" width="200px" />
+      <span>Thumbnail</span>
+      <button onClick={() => setEnableCrop(!enableCrop)}>
+        {enableCrop ? "Disable Crop" : "Enable Crop"}
+      </button>
+      {enableCrop ? (
+        <div>
+          <ReactCrop crop={crop} onChange={setCrop}>
+            <img id="preview" src={src} width="400px" />
+          </ReactCrop>
+          <button onClick={getCroppedImg}>Crop Image</button>
+        </div>
+      ) : (
+        <div>
+          <img src={src} width="400px" />
+        </div>
+      )}
     </div>
   );
 }
