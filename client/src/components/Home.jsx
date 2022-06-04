@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { addImage, postImage, removeUrls } from "../redux/actions";
 import Button from "@mui/material/Button";
+import { Add, CloudUpload, Done } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
 import Login from "./Login";
 import Logout from "./Logout";
-import { AppBar, Toolbar } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Stack,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import ImageCropper from "./ImageCropper";
 import PreviewImages from "./PreviewImages";
 import Thumbnails from "./Thumbnails";
@@ -86,64 +93,87 @@ function Home() {
               <Logout></Logout>
             </Toolbar>
           </AppBar>
-          <form
+          {/* <form
             style={{ marginTop: "5%", marginBottom: "2%" }}
             onSubmit={(e) => handleSubmit(e)}
             encType="multipart/form-data"
-          >
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              style={{ display: "none" }}
-              id="contained-button-file"
-              onChange={(e) => handleChange(e)}
-            />
-            <label htmlFor="contained-button-file">
-              <Button variant="contained" component="span">
-                Upload image
-              </Button>
-            </label>
-            <Button
-              onClick={(e) => handleSubmit(e)}
-              style={{ marginLeft: "2%" }}
-              variant="contained"
-              component="span"
+          > */}
+          <Box sx={{ marginTop: 10 }}>
+            <Typography variant="h3">Thumbnail Generator</Typography>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="center"
+              spacing={2}
+              marginTop={5}
             >
-              Create thumbnail
-            </Button>
-          </form>
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                style={{ display: "none" }}
+                id="contained-button-file"
+                onChange={(e) => handleChange(e)}
+              />
+              <label htmlFor="contained-button-file">
+                <Button
+                  variant="contained"
+                  component="span"
+                  startIcon={<CloudUpload />}
+                >
+                  Upload image
+                </Button>
+              </label>
+            </Stack>
+          </Box>
+          {/* </form> */}
           {urls.length === 0 && sendThumbnail ? (
             <div>
               <h3>...Loading</h3>
             </div>
           ) : (
             <div>
-              {input.selectedFile && urls.length === 0 && (
-                <div>
-                  <ImageCropper
-                    src={preview}
-                    enableCrop={enableCrop}
-                    setEnableCrop={setEnableCrop}
-                    crop={crop}
-                    setCrop={setCrop}
-                    input={input}
-                    setInput={setInput}
-                    setImage={setImage}
-                  ></ImageCropper>
-                  {/* {image && (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { xs: "column", lg: "row" },
+                  justifyContent: "center",
+                }}
+              >
+                {input.selectedFile && urls.length === 0 && (
+                  <div>
+                    <ImageCropper
+                      src={preview}
+                      enableCrop={enableCrop}
+                      setEnableCrop={setEnableCrop}
+                      crop={crop}
+                      setCrop={setCrop}
+                      input={input}
+                      setInput={setInput}
+                      setImage={setImage}
+                    ></ImageCropper>
+                    {/* {image && (
                     <div>
                       <img src={image} alt="cropped image" />
                     </div>
                   )} */}
-                </div>
-              )}
-              <PreviewImages
-                input={input}
-                urls={urls}
-                arrayFiles={arrayFiles}
-                preview={preview}
-              />
+                    <Button
+                      onClick={(e) => handleSubmit(e)}
+                      style={{ marginLeft: "2%" }}
+                      variant="contained"
+                      component="span"
+                    >
+                      Create thumbnail
+                    </Button>
+                  </div>
+                )}
+                <PreviewImages
+                  input={input}
+                  urls={urls}
+                  arrayFiles={arrayFiles}
+                  preview={preview}
+                />
+              </Box>
             </div>
           )}
           <Thumbnails urls={urls} arrayFiles={arrayFiles} />

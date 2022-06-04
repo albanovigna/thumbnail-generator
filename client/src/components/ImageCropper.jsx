@@ -1,4 +1,7 @@
-import React, { createRef, useEffect, useState } from "react";
+import { Crop, Done } from "@mui/icons-material";
+import { Button, IconButton, Stack } from "@mui/material";
+import { Box } from "@mui/system";
+import React from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
@@ -45,22 +48,56 @@ function ImageCropper({
   };
   return (
     <div>
-      <span>Thumbnail</span>
-      <button onClick={() => setEnableCrop(!enableCrop)}>
-        {enableCrop ? "Disable Crop" : "Enable Crop"}
-      </button>
-      {enableCrop ? (
-        <div>
-          <ReactCrop crop={crop} onChange={setCrop}>
-            <img id="preview" src={src} width="400px" />
-          </ReactCrop>
-          <button onClick={getCroppedImg}>Crop Image</button>
-        </div>
-      ) : (
-        <div>
-          <img src={src} width="400px" />
-        </div>
-      )}
+      <Box sx={{ marginTop: 5 }}>
+        <span>Thumbnail</span>
+        <Stack display="flex" alignItems="center" gap={2}>
+          <Button
+            onClick={() => setEnableCrop(!enableCrop)}
+            variant="contained"
+            component="span"
+            startIcon={<Crop />}
+          >
+            {enableCrop ? "Disable Crop" : "Enable Crop"}
+          </Button>
+
+          {enableCrop ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: { xs: "column", lg: "row" },
+                justifyContent: "center",
+                alignItems: "center",
+                width: "90%",
+              }}
+            >
+              <ReactCrop crop={crop} onChange={setCrop}>
+                <img id="preview" src={src} width="350" />
+              </ReactCrop>
+              {/* <Button
+                variant="contained"
+                component="span"
+                onClick={getCroppedImg}
+                startIcon={<Crop />}
+              >
+                Crop Image
+              </Button> */}
+              <IconButton
+                onClick={getCroppedImg}
+                aria-label="done"
+                size="medium"
+                color="success"
+                sx={{ width: "40px", height: "40px" }}
+              >
+                <Done sx={{ fontSize: "40px" }} />
+              </IconButton>
+            </div>
+          ) : (
+            <div>
+              <img src={src} width="350" />
+            </div>
+          )}
+        </Stack>
+      </Box>
     </div>
   );
 }

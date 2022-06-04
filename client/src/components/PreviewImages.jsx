@@ -1,3 +1,4 @@
+import { ImageList, ImageListItem, Box } from "@mui/material";
 import React from "react";
 
 function PreviewImages({ input, urls, arrayFiles, preview }) {
@@ -5,35 +6,51 @@ function PreviewImages({ input, urls, arrayFiles, preview }) {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
         alignItems: "center",
+        marginLeft: "5%",
       }}
     >
-      {input.selectedFile &&
-        urls.length === 0 &&
-        arrayFiles.map((x, i) => {
-          return (
-            <div
-              key={i}
-              style={{
-                marginBottom: "10%",
-                marginTop: "5%",
-              }}
-            >
-              <span
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {input.selectedFile &&
+          urls.length === 0 &&
+          arrayFiles.map((x, i) => {
+            return (
+              <div
+                key={i}
                 style={{
-                  alignSelf: "center",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  marginBottom: "10%",
+                  marginTop: "5%",
                 }}
-              >{`${x[0]} x ${x[1]} px`}</span>
-              <img
-                style={{ filter: "blur(4px)" }}
-                src={preview}
-                width={`${x[0]}px`}
-                height={`${x[1]}px`}
-              ></img>
-            </div>
-          );
-        })}
+              >
+                <span
+                  style={{
+                    alignSelf: "center",
+                  }}
+                >{`${x[0]} x ${x[1]} px`}</span>
+
+                <img
+                  style={{
+                    filter: "blur(6px)",
+                  }}
+                  src={preview}
+                  width={x[0] !== 400 ? `${x[0]}px` : 300}
+                  height={x[1] !== 300 ? `${x[1]}px` : 250}
+                ></img>
+              </div>
+            );
+          })}
+      </Box>
     </div>
   );
 }
