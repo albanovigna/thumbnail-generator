@@ -49,6 +49,7 @@ function Home() {
 
     const objectUrl = URL.createObjectURL(input.selectedFile);
     setPreview(objectUrl);
+    console.log(objectUrl);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
@@ -58,6 +59,7 @@ function Home() {
   useEffect(() => {
     dispatch(removeUrls());
   }, []);
+
   const handleChange = (e) => {
     e.preventDefault();
     setImage(null);
@@ -89,7 +91,13 @@ function Home() {
       {isAuthenticated ? (
         <div>
           <AppBar>
-            <Toolbar>
+            <Toolbar
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
               <Logout></Logout>
             </Toolbar>
           </AppBar>
@@ -143,6 +151,7 @@ function Home() {
                 {input.selectedFile && urls.length === 0 && (
                   <div>
                     <ImageCropper
+                      disabled={false}
                       src={preview}
                       enableCrop={enableCrop}
                       setEnableCrop={setEnableCrop}
@@ -157,6 +166,7 @@ function Home() {
                       <img src={image} alt="cropped image" />
                     </div>
                   )} */}
+                    {/* <Box marginTop={2}> */}
                     <Button
                       onClick={(e) => handleSubmit(e)}
                       style={{ marginLeft: "2%" }}
@@ -165,6 +175,7 @@ function Home() {
                     >
                       Create thumbnail
                     </Button>
+                    {/* </Box> */}
                   </div>
                 )}
                 <PreviewImages

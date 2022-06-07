@@ -17,25 +17,59 @@ function ImageCropper({
 }) {
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
+
     const canvas = document.createElement("canvas");
     const scaleX = imagePreview.naturalWidth / imagePreview.width;
     const scaleY = imagePreview.naturalHeight / imagePreview.height;
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext("2d");
+    const pixelRatio = window.devicePixelRatio;
 
-    // draw rotated image and store data.
+    canvas.width = Math.floor(crop.width * scaleX * pixelRatio);
+    canvas.height = Math.floor(crop.height * scaleY * pixelRatio);
+
+    const ctx = canvas.getContext("2d");
+    ctx.scale(pixelRatio, pixelRatio);
+    ctx.imageSmoothingQuality = "high";
+
+    const cropX = crop.x * scaleX;
+    const cropY = crop.y * scaleY;
+
+    const centerX = imagePreview.naturalWidth / 2;
+    const centerY = imagePreview.naturalHeight / 2;
+
+    ctx.save();
+
+    // 5) Move the crop origin to the canvas origin (0,0)
+    ctx.translate(-cropX, -cropY);
+    // 4) Move the origin to the center of the original position
+    ctx.translate(centerX, centerY);
+
+    // 2) Scale the image
+    // ctx.scale(scale, scale);
+    // 1) Move the center of the image to the origin (0,0)
+    ctx.translate(-centerX, -centerY);
     ctx.drawImage(
       imagePreview,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
       0,
       0,
-      crop.width,
-      crop.height
+      imagePreview.naturalWidth,
+      imagePreview.naturalHeight,
+      0,
+      0,
+      imagePreview.naturalWidth,
+      imagePreview.naturalHeight
     );
+
+    // ctx.drawImage(
+    //   imagePreview,
+    //   crop.x * scaleX,
+    //   crop.y * scaleY,
+    //   crop.width * scaleX,
+    //   crop.height * scaleY,
+    //   0,
+    //   0,
+    //   crop.width,
+    //   crop.height
+    // );
 
     canvas.toBlob((blob) => {
       setImage(URL.createObjectURL(blob));
@@ -49,51 +83,50 @@ function ImageCropper({
   return (
     <div>
       <Box sx={{ marginTop: 5 }}>
-        <span>Thumbnail</span>
         <Stack display="flex" alignItems="center" gap={2}>
-          <Button
-            onClick={() => setEnableCrop(!enableCrop)}
-            variant="contained"
-            component="span"
-            startIcon={<Crop />}
-          >
-            {enableCrop ? "Disable Crop" : "Enable Crop"}
-          </Button>
-
-          {enableCrop ? (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: { xs: "column", lg: "row" },
-                justifyContent: "center",
-                alignItems: "center",
-                width: "90%",
-              }}
+          <Stack display="flex" flexDirection="row" gap={2}>
+            <Button
+              onClick={() => setEnableCrop(!enableCrop)}
+              variant="contained"
+              component="span"
+              startIcon={<Crop />}
             >
-              <ReactCrop crop={crop} onChange={setCrop}>
-                <img id="preview" src={src} width="350" />
-              </ReactCrop>
-              {/* <Button
+              {enableCrop ? "Disable Crop" : "Enable Crop"}
+            </Button>
+            {enableCrop && (
+              <Button
+                onClick={getCroppedImg}
                 variant="contained"
                 component="span"
-                onClick={getCroppedImg}
-                startIcon={<Crop />}
-              >
-                Crop Image
-              </Button> */}
-              <IconButton
-                onClick={getCroppedImg}
-                aria-label="done"
-                size="medium"
                 color="success"
-                sx={{ width: "40px", height: "40px" }}
+                startIcon={<Done />}
               >
-                <Done sx={{ fontSize: "40px" }} />
-              </IconButton>
+                Confirm Crop
+              </Button>
+            )}
+          </Stack>
+          {enableCrop ? (
+            <div
+            // style={{
+            //   display: "flex",
+            //   flexDirection: { xs: "column", lg: "row" },
+            //   justifyContent: "center",
+            //   alignItems: "center",
+            //   width: "90%",
+            // }}
+            >
+              <ReactCrop
+                aspect={16 / 9}
+                disabled={enableCrop ? "" : "false"}
+                crop={crop}
+                onChange={setCrop}
+              >
+                <img style={{ maxWidth: "350px" }} id="preview" src={src} />
+              </ReactCrop>
             </div>
           ) : (
             <div>
-              <img src={src} width="350" />
+              <img style={{ maxWidth: "350px" }} src={src} />
             </div>
           )}
         </Stack>
