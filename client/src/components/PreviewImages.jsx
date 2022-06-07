@@ -3,21 +3,12 @@ import React from "react";
 
 function PreviewImages({ input, urls, arrayFiles, preview }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        marginLeft: "5%",
-      }}
-    >
+    <div>
       <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
       >
         {input.selectedFile &&
           urls.length === 0 &&

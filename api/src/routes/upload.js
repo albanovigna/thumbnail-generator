@@ -18,6 +18,15 @@ const storage = multer.diskStorage({
 const uploadImage = multer({
   storage,
   limits: { fileSize: 5000000 },
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png/;
+    const mimetypes = filetypes.test(file.mimetype);
+    const extname = filetypes.test(path.extname(file.originalname));
+    if (mimetypes && extname) {
+      return cb(null, true);
+    }
+    cb("El archivo tiene que ser jpg o png");
+  },
 }).single("image");
 
 const arrayFiles = [
@@ -59,7 +68,9 @@ router.post("/", uploadImage, async (req, res) => {
 
   for (const size of arrayFiles) {
     await sharp(file.path)
-      .resize(size[0], size[1])
+      .resize(size[0], size[1], {
+        fit: "inside",
+      })
       .toBuffer()
       .then(async (data) => {
         const result = await uploadFile(file, data, size[0]);
