@@ -1,9 +1,11 @@
 import { Crop, Done } from "@mui/icons-material";
-import { Button, IconButton, Stack } from "@mui/material";
+import { Button, Card, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+import { createTheme } from "@mui/material/styles";
+import { blue } from "@mui/material/colors";
 
 function ImageCropper({
   src,
@@ -17,7 +19,7 @@ function ImageCropper({
 }) {
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
-
+    const scale = 1;
     const canvas = document.createElement("canvas");
     const scaleX = imagePreview.naturalWidth / imagePreview.width;
     const scaleY = imagePreview.naturalHeight / imagePreview.height;
@@ -44,9 +46,10 @@ function ImageCropper({
     ctx.translate(centerX, centerY);
 
     // 2) Scale the image
-    // ctx.scale(scale, scale);
+    ctx.scale(scale, scale);
     // 1) Move the center of the image to the origin (0,0)
     ctx.translate(-centerX, -centerY);
+
     ctx.drawImage(
       imagePreview,
       0,
@@ -74,17 +77,38 @@ function ImageCropper({
     canvas.toBlob((blob) => {
       setImage(URL.createObjectURL(blob));
       const file = new File([blob], input.selectedFile.name, {
-        type: input.selectedFile.type,
+        // type: input.selectedFile.type,
+        type: "image/png",
       });
+      console.log("file es ", file);
       setInput({ selectedFile: file });
     });
     setEnableCrop(!enableCrop);
   };
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        light: "",
+        main: "#3f50b5",
+        dark: "#002884",
+        contrastText: "#fff",
+      },
+      secondary: {
+        light: "#ff7961",
+        main: "#e3f2fd",
+        dark: "#ba000d",
+        contrastText: "#000",
+      },
+    },
+  });
+  const color = blue[50];
+
   return (
     <div>
       <Box sx={{ marginTop: 5 }}>
         <Stack display="flex" alignItems="center" gap={2}>
-          <Stack display="flex" flexDirection="row" gap={2}>
+          {/* <Stack display="flex" flexDirection="row" gap={2}>
             <Button
               onClick={() => setEnableCrop(!enableCrop)}
               variant="contained"
@@ -104,31 +128,80 @@ function ImageCropper({
                 Confirm Crop
               </Button>
             )}
-          </Stack>
-          {enableCrop ? (
-            <div
-            // style={{
-            //   display: "flex",
-            //   flexDirection: { xs: "column", lg: "row" },
-            //   justifyContent: "center",
-            //   alignItems: "center",
-            //   width: "90%",
-            // }}
-            >
+          </Stack> */}
+          {/* {enableCrop ? ( */}
+          <div
+
+          // style={{
+          //   display: "flex",
+          //   flexDirection: { xs: "column", lg: "row" },
+          //   justifyContent: "center",
+          //   alignItems: "center",
+          //   width: "90%",
+          // }}
+          >
+            <div style={{ position: "relative", display: "inline-block" }}>
+              {/* <Card> */}
               <ReactCrop
                 aspect={16 / 9}
-                disabled={enableCrop ? "" : "false"}
+                maxWidth={400}
+                maxHeight={300}
+                disabled={!enableCrop}
                 crop={crop}
                 onChange={setCrop}
               >
                 <img style={{ maxWidth: "350px" }} id="preview" src={src} />
               </ReactCrop>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "5px",
+                  position: "absolute",
+                  top: "5px",
+                  right: "5px",
+                  zIndex: "5",
+                }}
+              >
+                <IconButton
+                  sx={{
+                    backgroundColor: "#2196f3",
+                    color: "#EDEDED",
+                    "&:hover": {
+                      backgroundColor: "#2979ff",
+                    },
+                  }}
+                  title="Enable crop"
+                  aria-label="crop"
+                  onClick={() => setEnableCrop(!enableCrop)}
+                >
+                  <Crop fontSize="small" />
+                </IconButton>
+                {enableCrop && (
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#fff",
+                      "&:hover": {
+                        backgroundColor: "#EDEDED",
+                      },
+                    }}
+                    title="Confirm crop"
+                    color="success"
+                    aria-label="done"
+                    onClick={getCroppedImg}
+                  >
+                    <Done fontSize="small" />
+                  </IconButton>
+                )}
+              </div>
             </div>
-          ) : (
-            <div>
-              <img style={{ maxWidth: "350px" }} src={src} />
-            </div>
-          )}
+            {/* </Card> */}
+          </div>
+          {/* // ) : (
+          //   <div>
+          //     <img style={{ maxWidth: "350px" }} src={src} />
+          //   </div>
+          // )} */}
         </Stack>
       </Box>
     </div>

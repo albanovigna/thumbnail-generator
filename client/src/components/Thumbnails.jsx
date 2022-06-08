@@ -1,7 +1,8 @@
 import { Box } from "@mui/system";
 import React from "react";
+import PreviewImages from "./PreviewImages";
 
-function Thumbnails({ urls, arrayFiles }) {
+function Thumbnails({ urls, arrayFiles, sendThumbnail, input, preview }) {
   const baseUrl = import.meta.env.VITE_API;
   return (
     <div>
