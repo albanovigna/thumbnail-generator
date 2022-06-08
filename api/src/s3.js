@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fs = require("fs");
 const S3 = require("aws-sdk/clients/s3");
+const { v4: uuidv4 } = require("uuid");
 
 const bucketName = process.env.AWS_BUCKET_NAME;
 const region = process.env.AWS_BUCKET_REGION;
@@ -19,7 +20,7 @@ function uploadFile(file, buffer, size) {
   const uploadParams = {
     Bucket: bucketName,
     Body: buffer,
-    Key: size + "_" + file.filename,
+    Key: size + "_" + uuidv4() + "_" + file.filename,
     ContentType: file.mimetype,
   };
 

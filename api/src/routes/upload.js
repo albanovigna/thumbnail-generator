@@ -65,11 +65,10 @@ const resizeImage = async (file, res) => {
 router.post("/", uploadImage, async (req, res) => {
   const file = req.file;
   const images = [];
-
   for (const size of arrayFiles) {
     await sharp(file.path)
       .resize(size[0], size[1], {
-        fit: "inside",
+        fit: "fill",
       })
       .toBuffer()
       .then(async (data) => {

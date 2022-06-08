@@ -17,6 +17,7 @@ import {
 import ImageCropper from "./ImageCropper";
 import PreviewImages from "./PreviewImages";
 import Thumbnails from "./Thumbnails";
+import { Oval } from "react-loader-spinner";
 
 function Home() {
   const dispatch = useDispatch();
@@ -56,12 +57,14 @@ function Home() {
   }, [input]);
   //
 
-  useEffect(() => {
-    dispatch(removeUrls());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(removeUrls());
+  // }, [urls.length]);
 
   const handleChange = (e) => {
     e.preventDefault();
+    dispatch(removeUrls());
+    setSendThumbnail(false);
     setImage(null);
     console.log("target value es", e.target.files[0]);
     setInput({ selectedFile: e.target.files[0] });
@@ -84,7 +87,27 @@ function Home() {
   };
 
   if (isLoading) {
-    return <h2>...Is Loading</h2>;
+    return (
+      <div
+        style={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Oval
+          ariaLabel="loading-indicator"
+          height={100}
+          width={100}
+          strokeWidth={5}
+          color="blue"
+          secondaryColor="white"
+        />
+      </div>
+    );
   }
   return (
     <div>
@@ -95,9 +118,10 @@ function Home() {
               sx={{
                 display: "flex",
                 flexDirection: "row",
-                justifyContent: "flex-end",
+                justifyContent: "space-between",
               }}
             >
+              <Typography variant="h5">Thumbnail Generator</Typography>
               <Logout></Logout>
             </Toolbar>
           </AppBar>
@@ -107,7 +131,6 @@ function Home() {
             encType="multipart/form-data"
           > */}
           <Box sx={{ marginTop: 10 }}>
-            <Typography variant="h3">Thumbnail Generator</Typography>
             <Stack
               direction="row"
               alignItems="center"
@@ -135,59 +158,60 @@ function Home() {
             </Stack>
           </Box>
           {/* </form> */}
-          {urls.length === 0 && sendThumbnail ? (
-            <div>
-              <h3>...Loading</h3>
-            </div>
-          ) : (
-            <div>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: { xs: "column", lg: "row" },
-                  justifyContent: "center",
-                }}
-              >
-                {input.selectedFile && urls.length === 0 && (
-                  <div>
-                    <ImageCropper
-                      disabled={false}
-                      src={preview}
-                      enableCrop={enableCrop}
-                      setEnableCrop={setEnableCrop}
-                      crop={crop}
-                      setCrop={setCrop}
-                      input={input}
-                      setInput={setInput}
-                      setImage={setImage}
-                    ></ImageCropper>
-                    {/* {image && (
-                    <div>
-                      <img src={image} alt="cropped image" />
-                    </div>
-                  )} */}
-                    {/* <Box marginTop={2}> */}
-                    <Button
-                      onClick={(e) => handleSubmit(e)}
-                      style={{ marginLeft: "2%" }}
-                      variant="contained"
-                      component="span"
-                    >
-                      Create thumbnail
-                    </Button>
-                    {/* </Box> */}
-                  </div>
-                )}
-                <PreviewImages
-                  input={input}
-                  urls={urls}
-                  arrayFiles={arrayFiles}
-                  preview={preview}
-                />
-              </Box>
-            </div>
-          )}
-          <Thumbnails urls={urls} arrayFiles={arrayFiles} />
+
+          <div>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                marginBottom: { lg: "20px" },
+              }}
+            >
+              {/* {input.selectedFile && urls.length === 0 && ( */}
+              {input.selectedFile && (
+                <div>
+                  <ImageCropper
+                    disabled={false}
+                    src={preview}
+                    enableCrop={enableCrop}
+                    setEnableCrop={setEnableCrop}
+                    crop={crop}
+                    setCrop={setCrop}
+                    input={input}
+                    setInput={setInput}
+                    setImage={setImage}
+                  ></ImageCropper>
+                  {/* <Box marginTop={2}> */}
+                  <Button
+                    onClick={(e) => handleSubmit(e)}
+                    style={{ marginLeft: "2%" }}
+                    variant="contained"
+                    component="span"
+                  >
+                    Create thumbnail
+                  </Button>
+                  {/* </Box> */}
+                </div>
+              )}
+
+              {/* )} */}
+              <PreviewImages
+                sendThumbnail={sendThumbnail}
+                input={input}
+                urls={urls}
+                arrayFiles={arrayFiles}
+                preview={preview}
+              />
+            </Box>
+          </div>
+          {/* <Thumbnails
+            preview={preview}
+            input={input}
+            urls={urls}
+            arrayFiles={arrayFiles}
+            sendThumbnail={sendThumbnail}
+          /> */}
         </div>
       ) : (
         <Login />
