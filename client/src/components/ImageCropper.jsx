@@ -1,11 +1,12 @@
 import { Crop, Done } from "@mui/icons-material";
 import { Button, Card, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useEffect } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { createTheme } from "@mui/material/styles";
 import { blue } from "@mui/material/colors";
+import imageCompression from "browser-image-compression";
 
 function ImageCropper({
   src,
@@ -16,6 +17,7 @@ function ImageCropper({
   input,
   setInput,
   setImage,
+  image,
 }) {
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
@@ -30,7 +32,7 @@ function ImageCropper({
 
     const ctx = canvas.getContext("2d");
     ctx.scale(pixelRatio, pixelRatio);
-    ctx.imageSmoothingQuality = "high";
+    ctx.imageSmoothingQuality = "low";
 
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleY;
@@ -62,47 +64,30 @@ function ImageCropper({
       imagePreview.naturalHeight
     );
 
-    // ctx.drawImage(
-    //   imagePreview,
-    //   crop.x * scaleX,
-    //   crop.y * scaleY,
-    //   crop.width * scaleX,
-    //   crop.height * scaleY,
-    //   0,
-    //   0,
-    //   crop.width,
-    //   crop.height
-    // );
+    ctx.restore();
 
     canvas.toBlob((blob) => {
-      setImage(URL.createObjectURL(blob));
       const file = new File([blob], input.selectedFile.name, {
-        // type: input.selectedFile.type,
-        type: "image/png",
+        type: input.selectedFile.type,
       });
-      console.log("file es ", file);
       setInput({ selectedFile: file });
     });
     setEnableCrop(!enableCrop);
   };
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        light: "",
-        main: "#3f50b5",
-        dark: "#002884",
-        contrastText: "#fff",
-      },
-      secondary: {
-        light: "#ff7961",
-        main: "#e3f2fd",
-        dark: "#ba000d",
-        contrastText: "#000",
-      },
-    },
-  });
-  const color = blue[50];
+  // const compressImage = async () => {
+  //   console.log(input.selectedFile, "file en onchange al principio es ");
+  //   const options = {
+  //     maxSizeMB: 5,
+  //     // maxWidthOrHeight: 1920,
+  //   };
+  //   const compressedFile = await imageCompression(input.selectedFile, options);
+  //   const file = new File([compressedFile], input.selectedFile.name, {
+  //     type: input.selectedFile.type,
+  //   });
+  //   setInput({ selectedFile: file });
+  //   console.log(input.selectedFile, "file en onchange es");
+  // };
 
   return (
     <div>
@@ -144,11 +129,10 @@ function ImageCropper({
               {/* <Card> */}
               <ReactCrop
                 aspect={16 / 9}
-                maxWidth={400}
-                maxHeight={300}
                 disabled={!enableCrop}
                 crop={crop}
                 onChange={setCrop}
+                // onComplete={compressImage}
               >
                 <img style={{ maxWidth: "350px" }} id="preview" src={src} />
               </ReactCrop>

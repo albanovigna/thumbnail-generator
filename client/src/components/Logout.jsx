@@ -1,25 +1,38 @@
 import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
 function Logout() {
-  const { logout } = useAuth0();
+  const { logout, user } = useAuth0();
   return (
-    <Button
-      sx={{
-        backgroundColor: "white",
-        border: "2px solid",
-        borderColor: "#2196f3",
-        "&:hover": {
-          backgroundColor: "#eee",
-        },
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-evenly",
+        gap: "10px",
       }}
-      variant="outlined"
-      onClick={() => logout()}
     >
-      logout
-    </Button>
+      <Typography sx={{ display: { xs: "none", lg: "flex" } }} variant="h7">
+        {user.given_name}
+      </Typography>
+      <Button
+        sx={{
+          backgroundColor: "white",
+          border: "2px solid",
+          borderColor: "#2196f3",
+          "&:hover": {
+            backgroundColor: "#eee",
+          },
+        }}
+        variant="outlined"
+        onClick={() => logout()}
+      >
+        logout
+      </Button>
+    </div>
   );
 }
 

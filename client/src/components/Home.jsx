@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addImage, postImage, removeUrls } from "../redux/actions";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import { Add, CloudUpload, Done } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -18,6 +19,8 @@ import ImageCropper from "./ImageCropper";
 import PreviewImages from "./PreviewImages";
 import Thumbnails from "./Thumbnails";
 import { Oval } from "react-loader-spinner";
+import imageCompression from "browser-image-compression";
+import Image from "./Image";
 
 function Home() {
   const dispatch = useDispatch();
@@ -41,7 +44,23 @@ function Home() {
   const [image, setImage] = useState();
 
   const [crop, setCrop] = useState({ aspect: 16 / 9 });
+
   // create a preview as a side effect, whenever selected file is changed
+
+  const compressImage = async () => {
+    console.log(input.selectedFile, "file en onchange al principio es ");
+    const options = {
+      maxSizeMB: 5,
+      // maxWidthOrHeight: 1920,
+    };
+    const compressedFile = await imageCompression(input.selectedFile, options);
+    const file = new File([compressedFile], input.selectedFile.name, {
+      type: input.selectedFile.type,
+    });
+    setInput({ selectedFile: file });
+    console.log(input.selectedFile, "file en onchange es");
+  };
+
   useEffect(() => {
     if (!input.selectedFile) {
       setPreview(undefined);
@@ -57,9 +76,22 @@ function Home() {
   }, [input]);
   //
 
-  // useEffect(() => {
-  //   dispatch(removeUrls());
-  // }, [urls.length]);
+  useEffect(() => {
+    setSendThumbnail(false);
+  }, []);
+
+  const validateImage = (file) => {
+    const filetypes = /jpeg|jpg|png/;
+    const mimetypes = filetypes.test(file.type);
+    const filesize = file.size < 3000000;
+    if (mimetypes && filesize) {
+      return true;
+    } else {
+      if (!mimetypes)
+        return alert("El archivo tiene que ser de tipo jpg o png");
+      if (!filesize) return alert("El archivo tiene que pesar menos de 5Mb");
+    }
+  };
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -67,23 +99,33 @@ function Home() {
     setSendThumbnail(false);
     setImage(null);
     console.log("target value es", e.target.files[0]);
-    setInput({ selectedFile: e.target.files[0] });
+
+    e.target.files[0] !== undefined && validateImage(e.target.files[0])
+      ? setInput({ selectedFile: e.target.files[0] })
+      : // : setInput({ selectedFile: null });
+        null;
   };
 
-  useEffect(() => {
-    setSendThumbnail(false);
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    console.log();
-    formData.append("image", input.selectedFile, input.selectedFile.name);
-
-    dispatch(postImage(formData));
-    dispatch(addImage(input.selectedFile.name));
-    setSendThumbnail(true);
-    alert("Imagen cargada correctamente");
+    const options = {
+      maxSizeMB: 4,
+      // maxWidthOrHeight: 1920,
+    };
+    const compressedFile = await imageCompression(input.selectedFile, options);
+    const file = new File([compressedFile], input.selectedFile.name, {
+      type: input.selectedFile.type,
+    });
+    console.log(file, "file es");
+    setInput({ selectedFile: file });
+    if (file) {
+      const formData = new FormData();
+      // formData.append("image", input.selectedFile, input.selectedFile.name);
+      formData.append("image", file, file.name);
+      dispatch(postImage(formData));
+      dispatch(addImage(input.selectedFile.name));
+      setSendThumbnail(true);
+    }
   };
 
   if (isLoading) {
@@ -132,15 +174,15 @@ function Home() {
           > */}
           <Box sx={{ marginTop: 10 }}>
             <Stack
-              direction="row"
+              display="flex"
+              flexDirection="row"
               alignItems="center"
               justifyContent="center"
-              spacing={2}
-              marginTop={5}
+              // spacing={2}
+              // marginTop={5}
             >
               <input
                 type="file"
-                multiple
                 accept="image/*"
                 style={{ display: "none" }}
                 id="contained-button-file"
@@ -159,59 +201,69 @@ function Home() {
           </Box>
           {/* </form> */}
 
-          <div>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                marginBottom: { lg: "20px" },
-              }}
-            >
-              {/* {input.selectedFile && urls.length === 0 && ( */}
-              {input.selectedFile && (
-                <div>
-                  <ImageCropper
-                    disabled={false}
-                    src={preview}
-                    enableCrop={enableCrop}
-                    setEnableCrop={setEnableCrop}
-                    crop={crop}
-                    setCrop={setCrop}
-                    input={input}
-                    setInput={setInput}
-                    setImage={setImage}
-                  ></ImageCropper>
-                  {/* <Box marginTop={2}> */}
-                  <Button
-                    onClick={(e) => handleSubmit(e)}
-                    style={{ marginLeft: "2%" }}
-                    variant="contained"
-                    component="span"
-                  >
-                    Create thumbnail
-                  </Button>
-                  {/* </Box> */}
-                </div>
-              )}
+          <Box
+            sx={{
+              // backgroundColor: "red",
+              height: { xs: "100%", lg: "80vh" },
+              display: "flex",
+              flexDirection: { xs: "column", lg: "row" },
+              justifyContent: { xs: "center", lg: "space-around" },
+              alignItems: "center",
+            }}
+          >
+            {/* {input.selectedFile && urls.length === 0 && ( */}
+            {input.selectedFile && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: "100%",
+                }}
+              >
+                <ImageCropper
+                  disabled={false}
+                  src={preview}
+                  enableCrop={enableCrop}
+                  setEnableCrop={setEnableCrop}
+                  crop={crop}
+                  setCrop={setCrop}
+                  input={input}
+                  setInput={setInput}
+                  setImage={setImage}
+                ></ImageCropper>
+                {/* <Image
+                  src={preview}
+                  enableCrop={enableCrop}
+                  setEnableCrop={setEnableCrop}
+                  crop={crop}
+                  setCrop={setCrop}
+                  input={input}
+                  setInput={setInput}
+                  setImage={setImage}
+                /> */}
+                {/* <Box marginTop={2}> */}
+                <Button
+                  onClick={(e) => handleSubmit(e)}
+                  variant="contained"
+                  component="span"
+                >
+                  Create thumbnail
+                </Button>
+                {/* </Box> */}
+              </div>
+            )}
 
-              {/* )} */}
-              <PreviewImages
-                sendThumbnail={sendThumbnail}
-                input={input}
-                urls={urls}
-                arrayFiles={arrayFiles}
-                preview={preview}
-              />
-            </Box>
-          </div>
-          {/* <Thumbnails
-            preview={preview}
-            input={input}
-            urls={urls}
-            arrayFiles={arrayFiles}
-            sendThumbnail={sendThumbnail}
-          /> */}
+            {/* )} */}
+            <PreviewImages
+              sendThumbnail={sendThumbnail}
+              input={input}
+              urls={urls}
+              arrayFiles={arrayFiles}
+              preview={preview}
+            />
+          </Box>
         </div>
       ) : (
         <Login />
