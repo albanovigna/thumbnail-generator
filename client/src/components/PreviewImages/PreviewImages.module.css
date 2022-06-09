@@ -1,0 +1,51 @@
+.mainDiv {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapDiv {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* // marginLeft: "50px", */
+}
+
+.mapDiv span {
+  align-self: center;
+}
+
+.blurPreviews {
+  position: relative;
+}
+
+.blurPreviews img {
+  filter: blur(6px);
+}
+
+.loaderContainer {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.divThumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.divThumbnails a {
+  text-decoration: none;
+}

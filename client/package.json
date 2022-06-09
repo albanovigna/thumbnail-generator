@@ -30,7 +30,8 @@
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
-    "redux-thunk": "^2.4.1"
+    "redux-thunk": "^2.4.1",
+    "sweetalert2": "^11.4.17"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

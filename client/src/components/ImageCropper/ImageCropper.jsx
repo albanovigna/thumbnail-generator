@@ -1,12 +1,10 @@
 import { Crop, Done } from "@mui/icons-material";
-import { Button, Card, IconButton, Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect } from "react";
+import React from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { createTheme } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
-import imageCompression from "browser-image-compression";
+import styles from "../ImageCropper/ImageCropper.module.css";
 
 function ImageCropper({
   src,
@@ -16,8 +14,6 @@ function ImageCropper({
   setCrop,
   input,
   setInput,
-  setImage,
-  image,
 }) {
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
@@ -75,67 +71,21 @@ function ImageCropper({
     setEnableCrop(!enableCrop);
   };
 
-  // const compressImage = async () => {
-  //   console.log(input.selectedFile, "file en onchange al principio es ");
-  //   const options = {
-  //     maxSizeMB: 5,
-  //     // maxWidthOrHeight: 1920,
-  //   };
-  //   const compressedFile = await imageCompression(input.selectedFile, options);
-  //   const file = new File([compressedFile], input.selectedFile.name, {
-  //     type: input.selectedFile.type,
-  //   });
-  //   setInput({ selectedFile: file });
-  //   console.log(input.selectedFile, "file en onchange es");
-  // };
-
   return (
     <div>
-      <Box sx={{ marginTop: 5 }}>
+      <Box>
         <Stack display="flex" alignItems="center" gap={2}>
-          {/* <Stack display="flex" flexDirection="row" gap={2}>
-            <Button
-              onClick={() => setEnableCrop(!enableCrop)}
-              variant="contained"
-              component="span"
-              startIcon={<Crop />}
-            >
-              {enableCrop ? "Disable Crop" : "Enable Crop"}
-            </Button>
-            {enableCrop && (
-              <Button
-                onClick={getCroppedImg}
-                variant="contained"
-                component="span"
-                color="success"
-                startIcon={<Done />}
-              >
-                Confirm Crop
-              </Button>
-            )}
-          </Stack> */}
-          {/* {enableCrop ? ( */}
-          <div
-
-          // style={{
-          //   display: "flex",
-          //   flexDirection: { xs: "column", lg: "row" },
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          //   width: "90%",
-          // }}
-          >
-            <div style={{ position: "relative", display: "inline-block" }}>
-              {/* <Card> */}
+          <div>
+            <div className={styles.mainDiv}>
               <ReactCrop
                 aspect={16 / 9}
                 disabled={!enableCrop}
                 crop={crop}
                 onChange={setCrop}
-                // onComplete={compressImage}
               >
-                <img style={{ maxWidth: "350px" }} id="preview" src={src} />
+                <img id="preview" src={src} />
               </ReactCrop>
+
               <div
                 style={{
                   display: "flex",
@@ -179,13 +129,7 @@ function ImageCropper({
                 )}
               </div>
             </div>
-            {/* </Card> */}
           </div>
-          {/* // ) : (
-          //   <div>
-          //     <img style={{ maxWidth: "350px" }} src={src} />
-          //   </div>
-          // )} */}
         </Stack>
       </Box>
     </div>
