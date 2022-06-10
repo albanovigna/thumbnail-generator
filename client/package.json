@@ -15,6 +15,7 @@
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.1",
     "@reduxjs/toolkit": "^1.8.2",
+    "@sweetalert2/theme-material-ui": "^5.0.11",
     "axios": "^0.27.2",
     "b64-to-blob": "^1.2.19",
     "browser-image-compression": "^2.0.0",
@@ -31,7 +32,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.4.1",
-    "sweetalert2": "^11.4.17"
+    "sweetalert2": "^11.4.17",
+    "sweetalert2-react-content": "^5.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

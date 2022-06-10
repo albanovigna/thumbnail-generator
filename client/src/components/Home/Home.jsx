@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addImage, postImage, removeUrls } from "../../redux/actions";
+import { addImage, postImage } from "../../redux/actions";
 import Button from "@mui/material/Button";
-import { CloudUpload } from "@mui/icons-material";
 import { useAuth0 } from "@auth0/auth0-react";
 import Login from "../Login/Login";
-import Logout from "../Logout/Logout";
 import { AppBar, Box, Card, Stack, Toolbar, Typography } from "@mui/material";
 import ImageCropper from "../ImageCropper/ImageCropper";
 import PreviewImages from "../PreviewImages/PreviewImages";
 import { Oval } from "react-loader-spinner";
 import imageCompression from "browser-image-compression";
 import styles from "../Home/Home.module.css";
-import Swal from "sweetalert2";
+import UploadButton from "./UploadButton";
+import NavBar from "./NavBar";
 
 function Home() {
   const dispatch = useDispatch();
@@ -44,7 +43,6 @@ function Home() {
 
     const objectUrl = URL.createObjectURL(input.selectedFile);
     setPreview(objectUrl);
-    console.log(objectUrl);
 
     // free memory when ever this component is unmounted
     return () => URL.revokeObjectURL(objectUrl);
@@ -55,36 +53,7 @@ function Home() {
     setSendThumbnail(false);
   }, []);
 
-  const validateImage = (file) => {
-    const filetypes = /jpeg|jpg|png/;
-    const mimetypes = filetypes.test(file.type);
-    const filesize = file.size < 3000000;
-    if (mimetypes && filesize) {
-      return true;
-
-      // } else {
-      //   if (!mimetypes) {
-      //     Swal.fire({
-      //       // icon: "warning",
-      //       // title: "The file has to be pdf or jpg",
-      //       // text: "Please, select other file",
-      //       icon: "success",
-      //       title: "Activity added correctly!",
-      //     });
-      //   }
-      //   if (!filesize) {
-      //     Swal.fire({
-      //       icon: "warning",
-      //       title: "The file must be less than 5mb",
-      //       text: "Please, select other file",
-      //     });
-      //   }
-      //   return false;
-    }
-  };
-
   const compressImage = async () => {
-    console.log(input.selectedFile, "file en onchange al principio es ");
     const options = {
       maxSizeMB: 4,
     };
@@ -93,19 +62,6 @@ function Home() {
       type: input.selectedFile.type,
     });
     return file;
-  };
-
-  const handleChange = (e) => {
-    e.preventDefault();
-    Swal.fire({
-      icon: "success",
-      title: "Activity added correctly!",
-    });
-    dispatch(removeUrls());
-    setSendThumbnail(false);
-    e.target.files[0] !== undefined && validateImage(e.target.files[0])
-      ? setInput({ selectedFile: e.target.files[0] })
-      : null;
   };
 
   const handleSubmit = async (e) => {
@@ -139,51 +95,11 @@ function Home() {
     <div>
       {isAuthenticated ? (
         <div>
-          <AppBar>
-            <Toolbar
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="h5">Thumbnail Generator</Typography>
-              <Logout></Logout>
-            </Toolbar>
-          </AppBar>
-          {/* <form
-            style={{ marginTop: "5%", marginBottom: "2%" }}
-            onSubmit={(e) => handleSubmit(e)}
-            encType="multipart/form-data"
-          > */}
-          <Box sx={{ marginTop: 10 }}>
-            <Stack
-              display="flex"
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                id="contained-button-file"
-                onChange={(e) => handleChange(e)}
-              />
-              <label htmlFor="contained-button-file">
-                <Button
-                  sx={{ marginBottom: { xs: "20px", lg: "0px" } }}
-                  variant="contained"
-                  component="span"
-                  startIcon={<CloudUpload />}
-                >
-                  Upload image
-                </Button>
-              </label>
-            </Stack>
-          </Box>
-          {/* </form> */}
-
+          <NavBar />
+          <UploadButton
+            setSendThumbnail={setSendThumbnail}
+            setInput={setInput}
+          />
           <Box
             sx={{
               height: { xs: "100%", lg: "80vh" },
