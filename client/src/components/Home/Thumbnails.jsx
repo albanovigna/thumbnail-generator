@@ -1,29 +1,27 @@
-import { Box, Card, Typography } from "@mui/material";
+import { Box, Card, CardHeader, Typography } from "@mui/material";
 import React from "react";
 import PreviewImages from "../PreviewImages/PreviewImages";
 
 function Thumbnails({ input, preview, sendThumbnail }) {
   return (
     <div>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-around",
-          alignItems: "center",
-        }}
-      >
+      <Box>
         {preview && (
           <div>
-            <Typography
-              sx={{ display: { lg: "none" }, color: "#fff" }}
-              gutterBottom
-              variant="h5"
-              component="div"
+            <Card
+              sx={{
+                marginBottom: { xs: "50px", lg: "0px" },
+                padding: "20px",
+                // boxShadow: { xs: "none", lg: "0px 3px 15px  grey" },
+                boxShadow: "0px 3px 15px  grey",
+              }}
             >
-              Thumbnails
-            </Typography>
-            <Card sx={{ marginBottom: "50px", padding: "20px" }}>
+              <CardHeader
+                sx={{
+                  backgroundColor: "#fff",
+                }}
+                title="Preview thumbnails"
+              />
               <PreviewImages
                 sendThumbnail={sendThumbnail}
                 input={input}

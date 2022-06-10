@@ -11,6 +11,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 axios.defaults.baseURL = import.meta.env.VITE_API || "http://localhost:3001";
 const domain = import.meta.env.VITE_AUTH0_DOMAIN;
 const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
+const redirectUri = import.meta.env.VITE_REDIRECT_URI;
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -19,7 +20,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Auth0Provider
           domain={domain}
           clientId={clientId}
-          redirectUri={window.location.origin}
+          redirectUri={redirectUri}
         >
           <App />
         </Auth0Provider>
