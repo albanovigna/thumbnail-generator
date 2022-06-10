@@ -1,16 +1,17 @@
 import { Box, Button } from "@mui/material";
 import React from "react";
 import { Oval } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 import styles from "../PreviewImages/PreviewImages.module.css";
 
-function PreviewImages({
-  input,
-  urls,
-  filesDimensions,
-  preview,
-  sendThumbnail,
-}) {
+function PreviewImages({ input, preview, sendThumbnail }) {
+  const filesDimensions = [
+    [400, 300],
+    [160, 120],
+    [120, 120],
+  ];
   const baseUrl = import.meta.env.VITE_API;
+  const urls = useSelector((state) => state.urls);
   return (
     <div className={styles.mainDiv}>
       <Box

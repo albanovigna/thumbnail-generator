@@ -1,20 +1,13 @@
 import { Crop, Done } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import styles from "../ImageCropper/ImageCropper.module.css";
 
-function ImageCropper({
-  src,
-  enableCrop,
-  setEnableCrop,
-  crop,
-  setCrop,
-  input,
-  setInput,
-}) {
+function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
+  const [crop, setCrop] = useState({ aspect: 16 / 9 });
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
     const scale = 1;
