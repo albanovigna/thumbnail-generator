@@ -35,36 +35,8 @@ const filesDimensions = [
   [120, 120],
 ];
 
-const resize = async (file, width, height) => {
-  sharp(file.path)
-    .resize(width, height)
-    .toBuffer()
-    .then((data) => {
-      const result = uploadFile(file, data, width);
-      return result;
-    });
-};
-
-const resizeImage = async (file, res) => {
-  const images = [];
-  const resize = ([size, other]) =>
-    sharp(file.path)
-      .resize(size, other)
-      .toBuffer()
-      .then(async (data) => {
-        const result = await uploadFile(file, data, size);
-        images.push(result);
-      });
-  Promise.all(filesDimensions.map(resize)).then(async () => {
-    res.json(images);
-  });
-  return images;
-};
-
-router.post("/", uploadImage, async (req, res) => {
-  const file = req.file;
-  const images = [];
-  for (const size of filesDimensions) {
+const resize = async (file, dimensions, images) => {
+  for (const size of dimensions) {
     await sharp(file.path)
       .resize(size[0], size[1], {
         fit: "fill",
@@ -75,7 +47,12 @@ router.post("/", uploadImage, async (req, res) => {
         images.push(result);
       });
   }
+};
 
+router.post("/", uploadImage, async (req, res) => {
+  const file = req.file;
+  const images = [];
+  await resize(file, filesDimensions, images);
   await unlinkFile(file.path);
   res.json(images);
 });
