@@ -1,0 +1,9 @@
+.mainDiv {
+  position: relative;
+  display: inline-block;
+}
+
+.mainDiv img {
+  max-width: 350px;
+  max-height: 60vh;
+}

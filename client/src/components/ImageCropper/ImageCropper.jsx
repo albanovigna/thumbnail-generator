@@ -1,22 +1,13 @@
 import { Crop, Done } from "@mui/icons-material";
-import { Button, Card, IconButton, Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { createTheme } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
+import styles from "../ImageCropper/ImageCropper.module.css";
 
-function ImageCropper({
-  src,
-  enableCrop,
-  setEnableCrop,
-  crop,
-  setCrop,
-  input,
-  setInput,
-  setImage,
-}) {
+function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
+  const [crop, setCrop] = useState({ aspect: 16 / 9 });
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
     const scale = 1;
@@ -30,7 +21,7 @@ function ImageCropper({
 
     const ctx = canvas.getContext("2d");
     ctx.scale(pixelRatio, pixelRatio);
-    ctx.imageSmoothingQuality = "high";
+    ctx.imageSmoothingQuality = "low";
 
     const cropX = crop.x * scaleX;
     const cropY = crop.y * scaleY;
@@ -62,96 +53,32 @@ function ImageCropper({
       imagePreview.naturalHeight
     );
 
-    // ctx.drawImage(
-    //   imagePreview,
-    //   crop.x * scaleX,
-    //   crop.y * scaleY,
-    //   crop.width * scaleX,
-    //   crop.height * scaleY,
-    //   0,
-    //   0,
-    //   crop.width,
-    //   crop.height
-    // );
+    ctx.restore();
 
     canvas.toBlob((blob) => {
-      setImage(URL.createObjectURL(blob));
       const file = new File([blob], input.selectedFile.name, {
-        // type: input.selectedFile.type,
-        type: "image/png",
+        type: input.selectedFile.type,
       });
-      console.log("file es ", file);
       setInput({ selectedFile: file });
     });
     setEnableCrop(!enableCrop);
   };
 
-  const theme = createTheme({
-    palette: {
-      primary: {
-        light: "",
-        main: "#3f50b5",
-        dark: "#002884",
-        contrastText: "#fff",
-      },
-      secondary: {
-        light: "#ff7961",
-        main: "#e3f2fd",
-        dark: "#ba000d",
-        contrastText: "#000",
-      },
-    },
-  });
-  const color = blue[50];
-
   return (
     <div>
-      <Box sx={{ marginTop: 5 }}>
+      <Box>
         <Stack display="flex" alignItems="center" gap={2}>
-          {/* <Stack display="flex" flexDirection="row" gap={2}>
-            <Button
-              onClick={() => setEnableCrop(!enableCrop)}
-              variant="contained"
-              component="span"
-              startIcon={<Crop />}
-            >
-              {enableCrop ? "Disable Crop" : "Enable Crop"}
-            </Button>
-            {enableCrop && (
-              <Button
-                onClick={getCroppedImg}
-                variant="contained"
-                component="span"
-                color="success"
-                startIcon={<Done />}
-              >
-                Confirm Crop
-              </Button>
-            )}
-          </Stack> */}
-          {/* {enableCrop ? ( */}
-          <div
-
-          // style={{
-          //   display: "flex",
-          //   flexDirection: { xs: "column", lg: "row" },
-          //   justifyContent: "center",
-          //   alignItems: "center",
-          //   width: "90%",
-          // }}
-          >
-            <div style={{ position: "relative", display: "inline-block" }}>
-              {/* <Card> */}
+          <div>
+            <div className={styles.mainDiv}>
               <ReactCrop
                 aspect={16 / 9}
-                maxWidth={400}
-                maxHeight={300}
                 disabled={!enableCrop}
                 crop={crop}
                 onChange={setCrop}
               >
-                <img style={{ maxWidth: "350px" }} id="preview" src={src} />
+                <img id="preview" src={src} />
               </ReactCrop>
+
               <div
                 style={{
                   display: "flex",
@@ -195,13 +122,7 @@ function ImageCropper({
                 )}
               </div>
             </div>
-            {/* </Card> */}
           </div>
-          {/* // ) : (
-          //   <div>
-          //     <img style={{ maxWidth: "350px" }} src={src} />
-          //   </div>
-          // )} */}
         </Stack>
       </Box>
     </div>
