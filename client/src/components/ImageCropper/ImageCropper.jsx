@@ -80,17 +80,7 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
                 <img id="preview" src={src} />
               </ReactCrop>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
-                  position: "absolute",
-                  top: "5px",
-                  right: "5px",
-                  zIndex: "5",
-                }}
-              >
+              <div className={styles.editorButtons}>
                 <IconButton
                   sx={{
                     backgroundColor: "#2196f3",

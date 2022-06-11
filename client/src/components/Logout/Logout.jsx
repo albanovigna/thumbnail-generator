@@ -5,6 +5,7 @@ import styles from "../Logout/Logout.module.css";
 
 function Logout() {
   const { logout, user } = useAuth0();
+  console.log(window.location.origin, "wlo");
   return (
     <div className={styles.logoutContainer}>
       <Typography sx={{ display: { xs: "none", lg: "flex" } }} variant="h7">
