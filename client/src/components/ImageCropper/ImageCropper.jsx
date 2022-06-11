@@ -1,4 +1,4 @@
-import { Crop, Done } from "@mui/icons-material";
+import { Co2Sharp, Crop, Done } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
@@ -52,15 +52,16 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
       imagePreview.naturalWidth,
       imagePreview.naturalHeight
     );
-
     ctx.restore();
 
-    canvas.toBlob((blob) => {
-      const file = new File([blob], input.selectedFile.name, {
-        type: input.selectedFile.type,
-      });
-      setInput({ selectedFile: file });
-    });
+    crop.width > 0
+      ? canvas.toBlob((blob) => {
+          const file = new File([blob], input.selectedFile.name, {
+            type: input.selectedFile.type,
+          });
+          setInput({ selectedFile: file });
+        })
+      : null;
     setEnableCrop(!enableCrop);
   };
 

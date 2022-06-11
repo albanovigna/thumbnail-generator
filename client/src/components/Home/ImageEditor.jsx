@@ -1,4 +1,4 @@
-import { Button, Card } from "@mui/material";
+import { Button, Card, CardHeader } from "@mui/material";
 import React from "react";
 import ImageCropper from "../ImageCropper/ImageCropper";
 import styles from "../Home/Home.module.css";
@@ -45,8 +45,11 @@ function ImageEditor({
             sx={{
               maxWidth: 345,
               marginBottom: { xs: "20px", lg: "0px" },
+              // boxShadow: { xs: "none", lg: "0px 3px 15px  grey" },
+              boxShadow: "0px 3px 15px  grey",
             }}
           >
+            <CardHeader title="Edit Image" />
             <ImageCropper
               src={preview}
               enableCrop={enableCrop}
