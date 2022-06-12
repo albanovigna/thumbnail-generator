@@ -55,6 +55,9 @@
   .mapDiv span {
     margin-top: 5px;
   }
+  .divThumbnails img {
+    margin-bottom: 50px;
+  }
   .divThumbnails a {
     margin-top: 0px;
     margin-bottom: 50px;
