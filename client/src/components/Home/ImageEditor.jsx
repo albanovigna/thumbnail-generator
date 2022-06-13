@@ -61,7 +61,6 @@ function ImageEditor({
               setEnableCrop={setEnableCrop}
               input={input}
               setInput={setInput}
-              sendThumbnail={sendThumbnail}
             ></ImageCropper>
             {!sendThumbnail && (
               <Button

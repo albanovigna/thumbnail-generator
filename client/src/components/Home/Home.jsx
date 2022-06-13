@@ -9,6 +9,7 @@ import NavBar from "./NavBar";
 import ImageEditor from "./ImageEditor";
 import Thumbnails from "./Thumbnails";
 import InitialImage from "./InitialImage";
+import NewThumbnailButton from "./NewThumbnailButton";
 
 function Home() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -58,18 +59,25 @@ function Home() {
       {isAuthenticated ? (
         <div>
           <NavBar />
-          <UploadButton
+          {!sendThumbnail && (
+            <UploadButton
+              setSendThumbnail={setSendThumbnail}
+              setInput={setInput}
+            />
+          )}
+          {/* <UploadButton
             setSendThumbnail={setSendThumbnail}
             setInput={setInput}
-          />
+          /> */}
           {!input.selectedFile && <InitialImage />}
           <Box
             sx={{
               height: { xs: "100%", lg: "80vh" },
               display: "flex",
               flexDirection: { xs: "column", lg: "row" },
-              justifyContent: { xs: "center", lg: "space-around" },
+              justifyContent: { xs: "center", lg: "space-evenly" },
               alignItems: "center",
+              marginTop: sendThumbnail ? "100px" : "0px",
             }}
           >
             {!sendThumbnail && (
@@ -80,24 +88,21 @@ function Home() {
                 input={input}
                 setInput={setInput}
                 setSendThumbnail={setSendThumbnail}
-                sendThumbnail={sendThumbnail}
               />
             )}
-            {/* <ImageEditor
-              preview={preview}
-              enableCrop={enableCrop}
-              setEnableCrop={setEnableCrop}
-              input={input}
-              setInput={setInput}
-              setSendThumbnail={setSendThumbnail}
-              sendThumbnail={sendThumbnail}
-            /> */}
+
             <Thumbnails
               sendThumbnail={sendThumbnail}
               input={input}
               preview={preview}
             />
           </Box>
+          {sendThumbnail && (
+            <NewThumbnailButton
+              setInput={setInput}
+              setSendThumbnail={setSendThumbnail}
+            />
+          )}
         </div>
       ) : (
         <Login />

@@ -1,19 +1,12 @@
-import { Co2Sharp, Crop, Done } from "@mui/icons-material";
+import { Crop, Done } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import styles from "../ImageCropper/ImageCropper.module.css";
 
-function ImageCropper({
-  src,
-  enableCrop,
-  setEnableCrop,
-  input,
-  setInput,
-  sendThumbnail,
-}) {
+function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
   const [crop, setCrop] = useState({ aspect: 16 / 9 });
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
@@ -72,6 +65,18 @@ function ImageCropper({
     setEnableCrop(!enableCrop);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && enableCrop) {
+      getCroppedImg();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return (
     <div>
       <Box>
@@ -86,41 +91,7 @@ function ImageCropper({
               >
                 <img id="preview" src={src} />
               </ReactCrop>
-              {!sendThumbnail && (
-                <div className={styles.editorButtons}>
-                  <IconButton
-                    sx={{
-                      backgroundColor: "#2196f3",
-                      color: "#EDEDED",
-                      "&:hover": {
-                        backgroundColor: "#2979ff",
-                      },
-                    }}
-                    title="Enable crop"
-                    aria-label="crop"
-                    onClick={() => setEnableCrop(!enableCrop)}
-                  >
-                    <Crop fontSize="small" />
-                  </IconButton>
-                  {enableCrop && (
-                    <IconButton
-                      sx={{
-                        backgroundColor: "#fff",
-                        "&:hover": {
-                          backgroundColor: "#EDEDED",
-                        },
-                      }}
-                      title="Confirm crop"
-                      color="success"
-                      aria-label="done"
-                      onClick={getCroppedImg}
-                    >
-                      <Done fontSize="small" />
-                    </IconButton>
-                  )}
-                </div>
-              )}
-              {/* <div className={styles.editorButtons}>
+              <div className={styles.editorButtons}>
                 <IconButton
                   sx={{
                     backgroundColor: "#2196f3",
@@ -151,7 +122,7 @@ function ImageCropper({
                     <Done fontSize="small" />
                   </IconButton>
                 )}
-              </div> */}
+              </div>
             </div>
           </div>
         </Stack>

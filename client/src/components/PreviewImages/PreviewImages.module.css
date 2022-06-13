@@ -44,7 +44,8 @@
 }
 
 .divThumbnails,
-.active {
+.active,
+.maxImage {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -52,12 +53,14 @@
   width: 100%;
 }
 .divThumbnails img,
-.active img {
+.active img,
+.maxImage img {
   object-fit: fill;
 }
 
 .divThumbnails a,
-.active a {
+.active a,
+.maxImage a {
   text-decoration: none;
   margin-top: 10px;
 }
@@ -66,18 +69,24 @@
   .mapDiv span {
     margin-top: 50px;
   }
-  .divThumbnails {
+  .divThumbnails,
+  .maxImage {
     border-bottom: 1px solid #a5a5a5;
   }
-  /* .divThumbnails img {
-    margin-bottom: 30px;
-  } */
   .active {
     border-bottom: none;
   }
   .divThumbnails a,
-  .active a {
+  .active a,
+  .maxImage a {
     margin-top: -40px;
     margin-bottom: 50px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .maxImage img {
+    width: 400px;
+    height: 300px;
   }
 }

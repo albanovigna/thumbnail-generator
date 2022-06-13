@@ -11,7 +11,7 @@ function Thumbnails({ input, preview, sendThumbnail }) {
             <Card
               sx={{
                 maxWidth: { xs: 345, lg: "100%" },
-                marginBottom: { xs: "100px", sm: "40vh", lg: "0px" },
+                marginBottom: { xs: "50px", sm: "40vh", lg: "0px" },
                 boxShadow: "0px 3px 15px  grey",
               }}
             >

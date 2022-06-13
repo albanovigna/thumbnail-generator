@@ -49,7 +49,11 @@ function PreviewImages({ input, preview, sendThumbnail }) {
                 ) : (
                   <div
                     className={
-                      x[0] !== 120 ? styles.divThumbnails : styles.active
+                      x[0] === 400
+                        ? styles.maxImage
+                        : x[0] !== 120
+                        ? styles.divThumbnails
+                        : styles.active
                     }
                   >
                     <img
