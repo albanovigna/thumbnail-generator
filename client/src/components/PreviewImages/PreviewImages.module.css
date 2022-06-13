@@ -7,6 +7,7 @@
 }
 
 .mapDiv {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -22,6 +23,7 @@
 
 .blurPreviews {
   position: relative;
+  width: 100%;
 }
 
 .blurPreviews img {
@@ -41,25 +43,41 @@
   align-items: center;
 }
 
-.divThumbnails {
+.divThumbnails,
+.active {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.divThumbnails img,
+.active img {
+  object-fit: fill;
 }
 
-.divThumbnails a {
+.divThumbnails a,
+.active a {
   text-decoration: none;
   margin-top: 10px;
 }
 
 @media (max-width: 1200px) {
   .mapDiv span {
-    margin-top: 5px;
+    margin-top: 50px;
   }
-  .divThumbnails img {
-    margin-bottom: 50px;
+  .divThumbnails {
+    border-bottom: 1px solid #a5a5a5;
   }
-  .divThumbnails a {
-    margin-top: 0px;
+  /* .divThumbnails img {
+    margin-bottom: 30px;
+  } */
+  .active {
+    border-bottom: none;
+  }
+  .divThumbnails a,
+  .active a {
+    margin-top: -40px;
     margin-bottom: 50px;
   }
 }

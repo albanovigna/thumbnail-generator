@@ -47,7 +47,11 @@ function PreviewImages({ input, preview, sendThumbnail }) {
                     </div>
                   </div>
                 ) : (
-                  <div className={styles.divThumbnails}>
+                  <div
+                    className={
+                      x[0] !== 120 ? styles.divThumbnails : styles.active
+                    }
+                  >
                     <img
                       style={{
                         filter: urls.length === 0 ? "blur(6px)" : "none",
@@ -66,6 +70,7 @@ function PreviewImages({ input, preview, sendThumbnail }) {
                         </Button>
                       </a>
                     )}
+                    <hr />
                   </div>
                 )}
               </div>

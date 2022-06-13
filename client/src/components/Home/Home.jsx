@@ -8,6 +8,7 @@ import UploadButton from "./UploadButton";
 import NavBar from "./NavBar";
 import ImageEditor from "./ImageEditor";
 import Thumbnails from "./Thumbnails";
+import InitialImage from "./InitialImage";
 
 function Home() {
   const { isAuthenticated, isLoading } = useAuth0();
@@ -61,6 +62,7 @@ function Home() {
             setSendThumbnail={setSendThumbnail}
             setInput={setInput}
           />
+          {!input.selectedFile && <InitialImage />}
           <Box
             sx={{
               height: { xs: "100%", lg: "80vh" },
@@ -70,14 +72,26 @@ function Home() {
               alignItems: "center",
             }}
           >
-            <ImageEditor
+            {!sendThumbnail && (
+              <ImageEditor
+                preview={preview}
+                enableCrop={enableCrop}
+                setEnableCrop={setEnableCrop}
+                input={input}
+                setInput={setInput}
+                setSendThumbnail={setSendThumbnail}
+                sendThumbnail={sendThumbnail}
+              />
+            )}
+            {/* <ImageEditor
               preview={preview}
               enableCrop={enableCrop}
               setEnableCrop={setEnableCrop}
               input={input}
               setInput={setInput}
               setSendThumbnail={setSendThumbnail}
-            />
+              sendThumbnail={sendThumbnail}
+            /> */}
             <Thumbnails
               sendThumbnail={sendThumbnail}
               input={input}

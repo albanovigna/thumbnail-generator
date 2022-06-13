@@ -6,7 +6,14 @@ import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import styles from "../ImageCropper/ImageCropper.module.css";
 
-function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
+function ImageCropper({
+  src,
+  enableCrop,
+  setEnableCrop,
+  input,
+  setInput,
+  sendThumbnail,
+}) {
   const [crop, setCrop] = useState({ aspect: 16 / 9 });
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
@@ -79,8 +86,41 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
               >
                 <img id="preview" src={src} />
               </ReactCrop>
-
-              <div className={styles.editorButtons}>
+              {!sendThumbnail && (
+                <div className={styles.editorButtons}>
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#2196f3",
+                      color: "#EDEDED",
+                      "&:hover": {
+                        backgroundColor: "#2979ff",
+                      },
+                    }}
+                    title="Enable crop"
+                    aria-label="crop"
+                    onClick={() => setEnableCrop(!enableCrop)}
+                  >
+                    <Crop fontSize="small" />
+                  </IconButton>
+                  {enableCrop && (
+                    <IconButton
+                      sx={{
+                        backgroundColor: "#fff",
+                        "&:hover": {
+                          backgroundColor: "#EDEDED",
+                        },
+                      }}
+                      title="Confirm crop"
+                      color="success"
+                      aria-label="done"
+                      onClick={getCroppedImg}
+                    >
+                      <Done fontSize="small" />
+                    </IconButton>
+                  )}
+                </div>
+              )}
+              {/* <div className={styles.editorButtons}>
                 <IconButton
                   sx={{
                     backgroundColor: "#2196f3",
@@ -111,7 +151,7 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
                     <Done fontSize="small" />
                   </IconButton>
                 )}
-              </div>
+              </div> */}
             </div>
           </div>
         </Stack>

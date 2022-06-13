@@ -13,6 +13,7 @@ function ImageEditor({
   input,
   setInput,
   setSendThumbnail,
+  sendThumbnail,
 }) {
   const dispatch = useDispatch();
   const compressImage = async () => {
@@ -35,6 +36,7 @@ function ImageEditor({
       dispatch(postImage(formData));
       dispatch(addImage(input.selectedFile.name));
       setSendThumbnail(true);
+      setEnableCrop(false);
     }
   };
   return (
@@ -59,15 +61,18 @@ function ImageEditor({
               setEnableCrop={setEnableCrop}
               input={input}
               setInput={setInput}
+              sendThumbnail={sendThumbnail}
             ></ImageCropper>
-            <Button
-              sx={{ marginTop: "10px", marginBottom: "10px" }}
-              onClick={(e) => handleSubmit(e)}
-              variant="contained"
-              component="span"
-            >
-              Create thumbnail
-            </Button>
+            {!sendThumbnail && (
+              <Button
+                sx={{ marginTop: "10px", marginBottom: "10px" }}
+                onClick={(e) => handleSubmit(e)}
+                variant="contained"
+                component="span"
+              >
+                Create thumbnail
+              </Button>
+            )}
           </Card>
         </div>
       )}
