@@ -65,10 +65,6 @@ function Home() {
               setInput={setInput}
             />
           )}
-          {/* <UploadButton
-            setSendThumbnail={setSendThumbnail}
-            setInput={setInput}
-          /> */}
           {!input.selectedFile && <InitialImage />}
           <Box
             sx={{

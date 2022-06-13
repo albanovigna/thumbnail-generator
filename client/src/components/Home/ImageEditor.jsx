@@ -50,10 +50,7 @@ function ImageEditor({
               boxShadow: "0px 3px 15px  grey",
             }}
           >
-            <CardHeader
-              title="Edit Image"
-              // sx={{ backgroundColor: "#EDEDED" }}
-            />
+            <CardHeader title="Edit Image" />
 
             <ImageCropper
               src={preview}

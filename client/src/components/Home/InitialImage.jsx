@@ -9,7 +9,6 @@ function InitialImage() {
       <Card
         sx={{
           maxWidth: 350,
-          // p: ,
           boxShadow: "0px 3px 15px  grey",
           marginTop: "20px",
           marginBottom: "20px",
