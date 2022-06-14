@@ -43,7 +43,7 @@ This project was bootstrapped with Vite
    VITE_AUTH0_DOMAIN = "your auth0 domain";
    VITE_AUTH0_CLIENT_ID = "your auth0 client id";
    VITE_API = "your localhost path. For example http://localhost:3001";
-   VITE_INIT_IMAGE=https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTelVna9__Qwt9GifGdE0R4FmsiTmZjoSE1vnC4LXdgozvqbjiOGufuXrladHL7nXowTt4&usqp=CAU
+   VITE_INIT_IMAGE="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTelVna9__Qwt9GifGdE0R4FmsiTmZjoSE1vnC4LXdgozvqbjiOGufuXrladHL7nXowTt4&usqp=CAU"
    ```
 
 ## Usage
