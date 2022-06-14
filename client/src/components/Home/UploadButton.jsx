@@ -35,11 +35,14 @@ function UploadButton({ setSendThumbnail, setInput }) {
 
   const handleChange = (e) => {
     e.preventDefault();
-    dispatch(removeUrls());
-    setSendThumbnail(false);
-    e.target.files[0] !== undefined && validateImage(e.target.files[0])
-      ? setInput({ selectedFile: e.target.files[0] })
-      : null;
+
+    if (e.target.files[0]) {
+      dispatch(removeUrls());
+      setSendThumbnail(false);
+      validateImage(e.target.files[0])
+        ? setInput({ selectedFile: e.target.files[0] })
+        : null;
+    }
   };
   return (
     <div>

@@ -29,7 +29,11 @@ function PreviewImages({ input, preview, sendThumbnail }) {
               <div key={i} className={styles.mapDiv}>
                 <span>{`${x[0]} x ${x[1]} px`}</span>
                 {sendThumbnail && urls && urls.length === 0 ? (
-                  <div className={styles.blurPreviews}>
+                  <div
+                    className={
+                      x[0] === 400 ? styles.blurMax : styles.blurPreviews
+                    }
+                  >
                     <img
                       src={preview}
                       width={x[0] !== 400 ? `${x[0]}px` : 300}
@@ -47,7 +51,15 @@ function PreviewImages({ input, preview, sendThumbnail }) {
                     </div>
                   </div>
                 ) : (
-                  <div className={styles.divThumbnails}>
+                  <div
+                    className={
+                      x[0] === 400
+                        ? styles.maxImage
+                        : x[0] !== 120
+                        ? styles.divThumbnails
+                        : styles.active
+                    }
+                  >
                     <img
                       style={{
                         filter: urls.length === 0 ? "blur(6px)" : "none",
@@ -66,6 +78,7 @@ function PreviewImages({ input, preview, sendThumbnail }) {
                         </Button>
                       </a>
                     )}
+                    <hr />
                   </div>
                 )}
               </div>

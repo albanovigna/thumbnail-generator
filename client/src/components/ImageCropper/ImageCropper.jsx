@@ -1,7 +1,7 @@
-import { Co2Sharp, Crop, Done } from "@mui/icons-material";
+import { Crop, Done } from "@mui/icons-material";
 import { IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import styles from "../ImageCropper/ImageCropper.module.css";
@@ -65,6 +65,18 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
     setEnableCrop(!enableCrop);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && enableCrop) {
+      getCroppedImg();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
   return (
     <div>
       <Box>
@@ -79,7 +91,6 @@ function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
               >
                 <img id="preview" src={src} />
               </ReactCrop>
-
               <div className={styles.editorButtons}>
                 <IconButton
                   sx={{

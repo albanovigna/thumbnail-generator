@@ -11,15 +11,11 @@ function Thumbnails({ input, preview, sendThumbnail }) {
             <Card
               sx={{
                 maxWidth: { xs: 345, lg: "100%" },
-                marginBottom: { xs: "10px", lg: "0px" },
+                marginBottom: { xs: "50px", sm: "40vh", lg: "0px" },
                 boxShadow: "0px 3px 15px  grey",
               }}
             >
-              <CardHeader
-                // sx={{ backgroundColor: "#EDEDED", marginBottom: "20px" }}
-                // sx={{ marginBottom: "20px" }}
-                title="Preview thumbnails"
-              />
+              <CardHeader title="Preview thumbnails" />
               <CardContent
                 sx={{
                   backgroundColor: "#EDEDED",
