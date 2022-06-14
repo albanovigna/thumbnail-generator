@@ -21,12 +21,14 @@
   margin-bottom: 10px;
 }
 
-.blurPreviews {
+.blurPreviews,
+.blurMax {
   position: relative;
   width: 100%;
 }
 
-.blurPreviews img {
+.blurPreviews img,
+.blurMax img {
   filter: blur(6px);
 }
 
@@ -86,6 +88,10 @@
 
 @media (min-width: 1200px) {
   .maxImage img {
+    width: 400px;
+    height: 300px;
+  }
+  .blurMax img {
     width: 400px;
     height: 300px;
   }

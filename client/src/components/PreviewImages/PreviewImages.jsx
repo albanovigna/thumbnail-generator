@@ -29,7 +29,11 @@ function PreviewImages({ input, preview, sendThumbnail }) {
               <div key={i} className={styles.mapDiv}>
                 <span>{`${x[0]} x ${x[1]} px`}</span>
                 {sendThumbnail && urls && urls.length === 0 ? (
-                  <div className={styles.blurPreviews}>
+                  <div
+                    className={
+                      x[0] === 400 ? styles.blurMax : styles.blurPreviews
+                    }
+                  >
                     <img
                       src={preview}
                       width={x[0] !== 400 ? `${x[0]}px` : 300}
