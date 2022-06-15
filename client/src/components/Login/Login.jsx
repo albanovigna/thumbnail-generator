@@ -29,23 +29,15 @@ function Login() {
           <Carousel
             sx={{
               width: { xs: 350, lg: 500 },
+              height: { xs: 250, lg: 400 },
             }}
           >
-            <img
-              src="https://media.graphcms.com/MAkjx8f3R3eZLcvbbOdM"
-              alt=""
-              width={350}
-            />
+            <img src="https://media.graphcms.com/MAkjx8f3R3eZLcvbbOdM" alt="" />
             <img
               src="https://media.graphassets.com/WtZc4lbYQ9Ohel1R22F1"
               alt=""
-              width={350}
             />
-            <img
-              src="https://media.graphcms.com/CG0R4tPRiO7fH6V9PmJw"
-              alt=""
-              width={350}
-            />
+            <img src="https://media.graphcms.com/CG0R4tPRiO7fH6V9PmJw" alt="" />
           </Carousel>
         </div>
         <Button
