@@ -3,7 +3,7 @@ import React from "react";
 import ImageCropper from "../ImageCropper/ImageCropper";
 import styles from "../Home/Home.module.css";
 import { useDispatch } from "react-redux";
-import { addImage, postImage } from "../../redux/actions";
+import { postImage } from "../../redux/actions";
 import imageCompression from "browser-image-compression";
 
 function ImageEditor({
@@ -34,7 +34,6 @@ function ImageEditor({
       const formData = new FormData();
       formData.append("image", file, file.name);
       dispatch(postImage(formData));
-      dispatch(addImage(input.selectedFile.name));
       setSendThumbnail(true);
       setEnableCrop(false);
     }

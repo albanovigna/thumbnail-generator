@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export const POST_IMAGE = "POST_IMAGE";
-export const ADD_IMAGE = "ADD_IMAGE";
 
-export const REMOVE_IMAGE = "REMOVE_IMAGE";
 export const REMOVE_URLS = "REMOVE_URLS";
 
 export const postImage = (payload) => {
@@ -16,20 +14,6 @@ export const postImage = (payload) => {
     };
     const upload = await axios.post("/upload", payload, config);
     dispatch({ type: POST_IMAGE, info: upload.data });
-  };
-};
-
-export const addImage = (payload) => {
-  return {
-    type: ADD_IMAGE,
-    payload,
-  };
-};
-
-export const removeImage = (payload) => {
-  return {
-    type: REMOVE_IMAGE,
-    payload,
   };
 };
 
