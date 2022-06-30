@@ -8,6 +8,9 @@ import styles from "../ImageCropper/ImageCropper.module.css";
 
 function ImageCropper({ src, enableCrop, setEnableCrop, input, setInput }) {
   const [crop, setCrop] = useState({ aspect: 16 / 9 });
+  /**
+   * I'm trying to get the cropped image from the canvas and save it as a file.
+   */
   const getCroppedImg = () => {
     let imagePreview = document.getElementById("preview");
     const scale = 1;

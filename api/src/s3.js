@@ -1,5 +1,4 @@
 require("dotenv").config();
-const fs = require("fs");
 const S3 = require("aws-sdk/clients/s3");
 const { v4: uuidv4 } = require("uuid");
 
@@ -38,3 +37,15 @@ function getFileStream(fileKey) {
   return s3.getObject(downloadParams).promise();
 }
 exports.getFileStream = getFileStream;
+
+// remove files from s3
+function removeFile(fileKey) {
+  const removeParams = {
+    Bucket: bucketName,
+    Delete: {
+      Objects: fileKey.urls,
+    },
+  };
+  return s3.deleteObjects(removeParams).promise();
+}
+exports.removeFile = removeFile;
