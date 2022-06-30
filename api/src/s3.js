@@ -40,12 +40,22 @@ exports.getFileStream = getFileStream;
 
 // remove files from s3
 function removeFile(fileKey) {
+  console.log(fileKey, "fk es");
   const removeParams = {
     Bucket: bucketName,
     Delete: {
-      Objects: fileKey.urls,
+      Objects: fileKey,
     },
   };
   return s3.deleteObjects(removeParams).promise();
 }
 exports.removeFile = removeFile;
+
+// list files from s3
+function listFiles() {
+  const listParams = {
+    Bucket: bucketName,
+  };
+  return s3.listObjectsV2(listParams).promise();
+}
+exports.listFiles = listFiles;

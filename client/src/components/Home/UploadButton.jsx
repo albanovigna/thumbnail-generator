@@ -11,7 +11,7 @@ function UploadButton({ setSendThumbnail, setInput }) {
   const validateImage = (file) => {
     const filetypes = /jpeg|jpg|png/;
     const mimetypes = filetypes.test(file.type);
-    const filesize = file.size < 3000000;
+    const filesize = file.size < 5000000;
     if (mimetypes && filesize) {
       return true;
     } else {
@@ -33,9 +33,8 @@ function UploadButton({ setSendThumbnail, setInput }) {
     }
   };
 
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     e.preventDefault();
-
     if (e.target.files[0]) {
       dispatch(removeUrls());
       setSendThumbnail(false);

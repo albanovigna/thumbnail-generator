@@ -10,8 +10,12 @@ import ImageEditor from "./ImageEditor";
 import Thumbnails from "./Thumbnails";
 import InitialImage from "./InitialImage";
 import NewThumbnailButton from "./NewThumbnailButton";
+import { removeImages } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 
 function Home() {
+  const dispatch = useDispatch();
+
   const { isAuthenticated, isLoading } = useAuth0();
 
   const [sendThumbnail, setSendThumbnail] = useState(false);
@@ -24,6 +28,7 @@ function Home() {
 
   // create a preview as a side effect, whenever selected file is changed
   useEffect(() => {
+    dispatch(removeImages());
     if (!input.selectedFile) {
       setPreview(undefined);
       return;
