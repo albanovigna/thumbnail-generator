@@ -36,14 +36,6 @@ const filesDimensions = [
   [120, 120],
 ];
 
-/**
- * It takes a file, an array of dimensions, and an array of images. It then loops through the
- * dimensions array and resizes the file to the dimensions in the array. It then uploads the file to
- * the cloud and pushes the result to the images array
- * @param file - The file object that was uploaded
- * @param dimensions - [[100, 100], [200, 200], [300, 300]]
- * @param images - an array of objects that will be returned to the client
- */
 const resize = async (file, dimensions, images) => {
   for (const size of dimensions) {
     await sharp(file.path)
