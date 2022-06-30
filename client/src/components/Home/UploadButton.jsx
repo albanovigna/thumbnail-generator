@@ -18,7 +18,7 @@ function UploadButton({ setSendThumbnail, setInput }) {
       if (!mimetypes) {
         Swal.fire({
           icon: "warning",
-          title: "The file has to be pdf or jpg",
+          title: "The file has to be png or jpg",
           text: "Please, select other file",
         });
       }
