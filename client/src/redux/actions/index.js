@@ -4,6 +4,8 @@ export const POST_IMAGE = "POST_IMAGE";
 
 export const REMOVE_URLS = "REMOVE_URLS";
 
+export const REMOVE_IMAGES = "REMOVE_IMAGES";
+
 export const postImage = (payload) => {
   return async (dispatch) => {
     const config = {
@@ -21,5 +23,12 @@ export const removeUrls = (payload) => {
   return {
     type: REMOVE_URLS,
     payload,
+  };
+};
+
+export const removeImages = () => {
+  return async function () {
+    const res = await axios.post(`/remove`);
+    return res;
   };
 };
